@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import ProductPreview from '../components/products/ProductPreview';
+import ProductCategorySlider from '../components/products/ProductCategorySlider';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import { CategoryEdge } from '../types/categories';
 
 const Layout = styled.div`
 	display: flex;
@@ -9,18 +13,17 @@ const Layout = styled.div`
 
 const TopBar = styled.div`
 	width: 100vw;
-	height: 10vh;
+	height: 5vh;
+	color: black;
+	padding: 0 5vw;
+	font-size: 3rem;
 	display: flex;
 	align-items: center;
-	justify-content: center;
-	background-color: yellow;
-	color: black;
-	font-size: 3rem;
 `;
 
 const Advert = styled.div`
 	width: 100vw;
-	height: 15vh;
+	height: 10vh;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -30,8 +33,9 @@ const Advert = styled.div`
 `;
 
 const Main = styled.div`
-	height: 50vh;
+	height: 60vh;
 	display: flex;
+	overflow: hidden;
 `;
 
 const SideBar = styled.div`
@@ -77,13 +81,41 @@ const FooterButtons = styled.div`
 	width: 100vw;
 `;
 
+const TopBarLogo = styled.img`
+	display: block;
+	height: calc(4.5vh);
+	width: calc(4.5vh);
+	margin: 0;
+	padding: 0;
+`;
+
+const categories = [
+	'beef',
+	'chicken',
+	'sandwiches & wraps',
+	'snacks & sides',
+	'desserts & shakes',
+	'beverages',
+	'McCafe',
+	'McPicks',
+];
+
 const Shop = () => {
+	const { data } = useQuery<QueryInterface>(PageQuery);
+
+	console.log(data);
 	return (
 		<Layout>
 			<Advert>Advert</Advert>
-			<TopBar>Top Bar</TopBar>
+			<TopBar>
+				<TopBarLogo src="https://via.placeholder.com/40" />
+			</TopBar>
 			<Main>
-				<SideBar>Side Bar</SideBar>
+				<SideBar>
+					<ProductCategorySlider
+						categories={data?.categories?.edges ?? []}
+					/>
+				</SideBar>
 				<ProductArea>
 					<ProductPreview />
 					<ProductPreview />
@@ -105,5 +137,27 @@ const Shop = () => {
 		</Layout>
 	);
 };
+
+interface QueryInterface {
+	categories: {
+		edges: CategoryEdge[];
+	};
+}
+
+const PageQuery = gql`
+	query Categories {
+		categories: allCategorys {
+			edges {
+				node {
+					_meta {
+						id
+					}
+					name
+					image
+				}
+			}
+		}
+	}
+`;
 
 export default Shop;

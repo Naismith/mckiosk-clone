@@ -2,6 +2,8 @@ import React from 'react';
 import Router from './Router';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import theme from './config/theme';
+import client from './config/apollo';
+import { ApolloProvider } from '@apollo/react-hooks';
 
 const GlobalStyle = createGlobalStyle`
 	html, body {
@@ -25,7 +27,9 @@ const App = () => (
 	<>
 		<GlobalStyle />
 		<ThemeProvider theme={theme}>
-			<Router />
+			<ApolloProvider client={client}>
+				<Router />
+			</ApolloProvider>
 		</ThemeProvider>
 	</>
 );

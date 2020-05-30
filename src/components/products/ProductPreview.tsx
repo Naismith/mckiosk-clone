@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import placeholder from '../../assets/product.jpg';
+// import placeholder from '../../assets/product.jpg';
 
 const Container = styled.article`
 	display: inline-block;
@@ -23,7 +23,7 @@ const ProductName = styled.p`
 `;
 const ProductPreview = () => (
 	<Container>
-		<ProductImage src={placeholder} />
+		<ProductImage src="" />
 		<ProductName>Hamburger</ProductName>
 	</Container>
 );
